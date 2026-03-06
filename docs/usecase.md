@@ -1,6 +1,6 @@
 @startuml use_case
  
-title "<color #1A6><size 15>Exbooks 共享書籍</size></color>\n<color #16A><size 18>Use Case Diagram 用例圖</size></color>\n<color grey>v2.5.0 @2026-03-05</color>\n"
+title "<color #1A6><size 15>Exbooks 共享書籍</size></color>\n<color #16A><size 18>Use Case Diagram 用例圖</size></color>\n<color grey>v2.6.0 @2026-03-06</color>\n"
  
 left to right direction
  
@@ -29,10 +29,11 @@ rectangle "一般功能" {
   usecase EditProfile as "編輯用戶資料"
   usecase SearchBook as "查詢書籍\nSearch Book" #FEE
   usecase QueryCredit as "查詢信用評價\nQuery Credit" #FEE
-  usecase WishList as#6d6464t" #6d6464
+  usecase WishList as "願望書車\nWish List" #6d6464
   usecase ExtendLoan as "申請延長借閱"
   usecase ApproveExtend as "核准延長借閱"
   usecase DeclineDeal as "拒絕交易申請"
+  usecase CancelRequest as "取消申請\nCancel Request" #FAA
   usecase SelectApplicant as "選擇接受\n申請者" #FEE
   usecase Negotiate as "交易留言\n協商面交細節" #FEE
  
@@ -80,6 +81,7 @@ Reader --> Borrow
 Reader --> Return
 Reader --> ExtendLoan
 Reader --> Negotiate
+Reader --> CancelRequest
  
 Keeper --> Export
 Keeper --> Revert
@@ -88,6 +90,7 @@ Keeper --> DeclineDeal
 Keeper --> SelectApplicant
 Keeper --> Negotiate
 Keeper --> ApproveExtend
+Keeper --> CancelRequest
  
 Owner --> Lend
 Owner --> Retrieve
@@ -98,6 +101,7 @@ Owner --> DeclineDeal
 Owner --> SelectApplicant
 Owner --> Negotiate
 Owner --> ApproveExtend
+Owner --> CancelRequest
  
 ExtendLoan --> ApproveExtend : <<extend>>
  
@@ -120,6 +124,7 @@ Loan --> ProcessDeal : <<extend>>
 Restore --> ProcessDeal : <<extend>>
 Regress --> ProcessDeal : <<extend>>
 Except --> ProcessDeal : <<extend>>
+CancelRequest --> ProcessDeal : <<extend>>
  
 ProcessBookDue --> ChgBookStatus : <<include>>
 ProcessBookDue --> MailNotice : <<include>>
