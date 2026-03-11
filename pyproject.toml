@@ -21,6 +21,9 @@ test = [
     "factory-boy>=3.3",
     "faker>=30.0",
 ]
+prod = [
+    "gunicorn>=23.0",
+]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "exbook.test_settings"
