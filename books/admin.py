@@ -64,6 +64,7 @@ class BookSetAdmin(admin.ModelAdmin):
     search_fields = ("name", "owner__username")
     autocomplete_fields = ("owner",)
     readonly_fields = ("created_at", "updated_at")
+    list_per_page = 20
 
 
 @admin.register(SharedBook)
@@ -72,7 +73,7 @@ class SharedBookAdmin(admin.ModelAdmin):
         "official_book",
         "owner",
         "keeper",
-        "status",
+        "status_colored",
         "transferability",
         "loan_duration_days",
         "listed_at",
@@ -87,7 +88,48 @@ class SharedBookAdmin(admin.ModelAdmin):
     )
     autocomplete_fields = ("official_book", "owner", "keeper", "book_set")
     readonly_fields = ("created_at", "updated_at")
+    list_per_page = 20
     inlines = [BookPhotoInline]
+
+    fieldsets = (
+        ("書籍關聯", {"fields": ("official_book", "book_set")}),
+        ("持有人資訊", {"fields": ("owner", "keeper")}),
+        (
+            "借閱設定",
+            {
+                "fields": (
+                    "status",
+                    "transferability",
+                    "loan_duration_days",
+                    "extend_duration_days",
+                    "listed_at",
+                )
+            },
+        ),
+        (
+            "系統資訊",
+            {
+                "fields": ("created_at", "updated_at"),
+                "classes": ("collapse",),
+            },
+        ),
+    )
+
+    @admin.display(description="狀態", ordering="status")
+    def status_colored(self, obj):
+        colors = {
+            "T": "green",
+            "O": "orange",
+            "R": "red",
+            "V": "blue",
+            "S": "gray",
+        }
+        color = colors.get(obj.status, "black")
+        return format_html(
+            '<span style="color: {}; font-weight: bold;">{}</span>',
+            color,
+            obj.get_status_display(),
+        )
 
 
 @admin.register(BookPhoto)
